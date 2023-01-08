@@ -16,7 +16,8 @@ function createCandlesBox() {
 
 
     //create the main container
-    var cont = document.getElementById(document.querySelector('script[src="./widgets/candles.js"]').className)
+    var cont = document.getElementById(document.querySelector('script[src="./widgets/candles.js"]'))
+    console.log(cont)
 
 
     //create the form
