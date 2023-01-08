@@ -2,7 +2,7 @@ function loadStyleSheet() {
     var sheet_link = document.createElement('link')
     sheet_link.rel = 'stylesheet'
     sheet_link.type = 'text/css'
-    sheet_link.href = 'http://78.141.201.138/widgets/candles/css/style.css'
+    sheet_link.href = 'https://cdn.jsdelivr.net/gh/EthanWalton24/candles-widget@latest/styles.css'
     document.getElementsByTagName('head')[0].appendChild(sheet_link)
 }
 
@@ -16,8 +16,7 @@ function createCandlesBox() {
 
 
     //create the main container
-    var cont = document.getElementById(document.querySelector('script[src="./widgets/candles.js"]'))
-    console.log(cont)
+    var cont = document.getElementById(document.querySelector('script[src="https://cdn.jsdelivr.net/gh/EthanWalton24/candles-widget@latest/candles.js').className)
 
 
     //create the form
