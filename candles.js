@@ -148,7 +148,7 @@ function enter_name(x,name) {
 
 //run the functions to create the widget on window load
 window.onload = () => {
-  fetch(`http://78.141.201.138/api/get_widget_data/candles`, {
+  fetch(`https://cryptofacts.dev/api/get_widget_data/candles`, {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
