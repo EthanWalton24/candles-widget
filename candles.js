@@ -15,15 +15,15 @@ function createCandlesBox(symbols,timeframes) {
 
 
   //create the form
-  var form = document.createElement('form')
-  form.action = 'download-candles/'
-  form.method = 'post'
+  // var form = document.createElement('form')
+  // form.action = 'download-candles/'
+  // form.method = 'post'
 
 
   var title = document.createElement('div')
   title.innerHTML = 'Candles Data'
   title.className = 'cont-title'
-  form.appendChild(title)
+  cont.appendChild(title)
 
 
 
@@ -55,7 +55,7 @@ function createCandlesBox(symbols,timeframes) {
       symbol_select.appendChild(list_ele)
   }
   symbol_cont.appendChild(symbol_select)
-  form.appendChild(symbol_cont)
+  cont.appendChild(symbol_cont)
 
 
 
@@ -82,7 +82,7 @@ function createCandlesBox(symbols,timeframes) {
       timeframe_select.appendChild(option)
   }
   timeframe_cont.appendChild(timeframe_select)
-  form.appendChild(timeframe_cont)
+  cont.appendChild(timeframe_cont)
 
 
   //create the start date input container
@@ -98,25 +98,24 @@ function createCandlesBox(symbols,timeframes) {
   date_input.min = '2000-01-01'
   date_input.name = 'start-date'
   date_cont.appendChild(date_input)
-  form.appendChild(date_cont)
+  cont.appendChild(date_cont)
 
 
   //create the form submit button
   var button_status = 'enabled'//((blocked == true) ? 'disabled' : 'enabled')
   var button_text = 'Download Candles'//((blocked == true) ? 'Rate Limit reached, come back in 24 hours' : 'Download Candles')
   var submit_button = document.createElement('button')
-  submit_button.type = 'submit'
   submit_button.className = `download-button ${button_status}`
   submit_button.innerHTML = button_text
-  form.appendChild(submit_button)
+  submit_button.onclick = function(){download_file(this)}
+  cont.appendChild(submit_button)
 
   
-  cont.appendChild(form)
+  // cont.appendChild(form)
 
 }
 
 function filter_search(x) {
-  console.log(x)
   // Declare variables
   var ul, li, a, i, txtValue;
   input = x;
@@ -143,7 +142,38 @@ function enter_name(x,name) {
 
 
 
+function download_file(x){
+  var parent = x.parentNode
+  symbol = parent.getElementsByTagName('input')[0].value
+  timeframe = parent.getElementsByTagName('select')[0].value
+  start_date = parent.getElementsByTagName('input')[1].value
 
+
+  fetch(`https://cryptofacts.dev/api/file_download`, {
+    method: 'POST',
+    body: JSON.stringify({'symbol':symbol,'timeframe':timeframe,'start-date':start_date}),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then( (response) => response.json())
+  .then( (data) => {
+    let csv_data = [data['column_names']].concat(data['data'])
+    console.log(csv_data)
+    let csvContent = "data:text/csv;charset=utf-8," + csv_data.map(row => row.join(',')).join('\n')
+
+    var encodedUri = encodeURI(csvContent);
+    var link = document.createElement("a");
+    link.id = 'download-link'
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `${symbol}_${timeframe}_${start_date}.csv`);
+    document.body.appendChild(link);
+
+    link.click();
+    document.getElementById('download-link').remove()
+  })
+
+}
 
 
 //run the functions to create the widget on window load
